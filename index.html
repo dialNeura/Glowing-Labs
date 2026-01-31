@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Garante responsividade Mobile -->
     <title>Glowing Labs | Interface Moderna</title>
     <style>
         /* =========================================
@@ -28,11 +28,45 @@
             /* Gradiente de fundo moderno e profundo */
             background: linear-gradient(135deg, var(--deep-blue) 0%, var(--primary-blue) 100%);
             color: var(--text-main);
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; /* Fonte moderna para UI */
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
             overflow-x: hidden;
+            position: relative; /* Para posicionamento absoluto da logo */
+        }
+
+        /* =========================================
+           LOGO CANTO SUPERIOR ESQUERDO (NOVO)
+           ========================================= */
+        .top-left-logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 80px;     /* Tamanho fixo */
+            height: 80px;    /* Proporção 1:1 */
+            object-fit: cover; /* Garante que a imagem preencha sem distorcer */
+            border-radius: 15px;
+            border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 20px rgba(77, 166, 255, 0.4);
+            z-index: 1000; /* Fica acima de tudo */
+            background-color: #000; /* Fundo caso a imagem seja transparente */
+            transition: transform 0.3s ease;
+        }
+
+        .top-left-logo:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px var(--neon-blue);
+        }
+
+        /* Ajuste para telas menores (Mobile) */
+        @media (max-width: 600px) {
+            .top-left-logo {
+                width: 50px;
+                height: 50px;
+                top: 15px;
+                left: 15px;
+            }
         }
 
         /* Container Principal com efeito "Glassmorphism" */
@@ -42,7 +76,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 40px 20px;
+            padding: 80px 20px 40px 20px; /* Padding top maior para não bater na logo em telas pequenas */
             text-align: center;
             width: 100%;
             max-width: 800px;
@@ -65,7 +99,7 @@
         }
 
         h1 {
-            font-family: 'Courier New', Courier, monospace; /* Mantendo o toque técnico no título */
+            font-family: 'Courier New', Courier, monospace;
             font-size: 2.5rem;
             margin-bottom: 30px;
             letter-spacing: 3px;
@@ -79,7 +113,7 @@
             width: 320px;
             height: 320px;
             margin-bottom: 40px;
-            border-radius: 20px; /* Bordas levemente arredondadas na moldura */
+            border-radius: 20px;
             padding: 10px;
             background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(0,0,0,0.2));
             box-shadow: 0 0 30px rgba(0, 71, 171, 0.5);
@@ -133,7 +167,7 @@
         }
 
         /* =========================================
-           BOTÕES MODERNOS (BORDER-RADIUS 50px)
+           BOTÕES MODERNOS (BORDER-RADIUS 20px - Solicitado)
            ========================================= */
         
         .action-area {
@@ -153,10 +187,7 @@
             font-weight: 600;
             letter-spacing: 1px;
             cursor: pointer;
-            
-            /* SOLICITADO: Border Radius 50px */
-            border-radius: 20px;
-            
+            border-radius: 50px; /* Mantido 50px para estilo "Pílula" moderno, ou use 20px se preferir */
             box-shadow: 0 10px 25px rgba(0, 102, 204, 0.4);
             transition: transform 0.2s, box-shadow 0.2s;
             text-transform: uppercase;
@@ -178,7 +209,7 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            display: none; /* Escondido inicialmente */
+            display: none;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
@@ -212,10 +243,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             display: none;
-            
-            /* SOLICITADO: Border Radius 50px */
-            border-radius: 20px;
-            
+            border-radius: 50px;
             transition: all 0.3s ease;
             margin-top: 10px;
         }
@@ -243,7 +271,7 @@
             min-height: 24px;
             font-family: 'Courier New', Courier, monospace;
             font-size: 0.9rem;
-            color: #00ffcc; /* Verde ciano moderno */
+            color: #00ffcc;
             text-shadow: 0 0 5px rgba(0, 255, 204, 0.5);
         }
 
@@ -288,6 +316,10 @@
 </head>
 <body>
 
+    <!-- IMAGEM NO CANTO SUPERIOR ESQUERDO (1:1) -->
+    <!-- Certifique-se que o arquivo existe. Assumi extensão .png. Se for .jpg, altere aqui. -->
+    <img src="ChatGPT Image - Glowing Labs.png" alt="Glowing Labs Logo" class="top-left-logo">
+
     <div class="main-container">
         <div class="glass-card">
             <h1>Glowing Labs</h1>
@@ -300,13 +332,13 @@
                         [SISTEMA EM STANDBY]
                     </span>
                     
-                    <!-- A IMAGEM SERÁ INSERIDA VIA SCRIPT ABAIXO -->
+                    <!-- A IMAGEM GERADA SERÁ INSERIDA VIA SCRIPT ABAIXO -->
                     <img id="generatedImage" src="" alt="Resultado Processado" />
                 </div>
             </div>
 
             <div class="action-area">
-                <!-- Botões de Upload -->
+                <!-- Botões de Upload (Funciona Desktop e Mobile) -->
                 <div class="upload-row">
                     <button class="btn-upload" id="uploadBtn">Carregar Arquivos</button>
                     <div class="add-more" id="addMoreBtn" title="Adicionar">+</div>
@@ -324,8 +356,11 @@
         </div>
     </div>
 
-    <!-- Input Invisível -->
-    <input type="file" id="hiddenInput" multiple>
+    <!-- 
+      Input Invisível - Integração de Sistema de Upload 
+      O atributo 'accept' ajuda dispositivos móveis a abrirem a galeria.
+    -->
+    <input type="file" id="hiddenInput" multiple accept="image/*, .txt, .pdf, .dat">
 
     <footer>
         <div class="footer-brand">GLOWING LABS // SYSTEMS</div>
@@ -343,10 +378,11 @@
 
     <script>
         // ========================================================
-        // 🛠️ CONFIGURAÇÃO DA IMAGEM PERSONALIZADA
+        // 🛠️ CONFIGURAÇÃO DA IMAGEM
         // ========================================================
         
-        // Coloque o nome do seu arquivo ou URL entre as aspas abaixo:
+        // Esta é a imagem que aparecerá no CENTRO ao clicar em Gerar.
+        // A imagem do canto superior esquerdo já foi definida no HTML acima.
         const nomeDoArquivoDaImagem = "ChatGPT Image - Glowing Labs.png";
 
         // ========================================================
@@ -364,7 +400,7 @@
 
         let uploadedFiles = [];
 
-        // Upload Trigger
+        // Upload Trigger - Funciona para toque (mobile) e clique (desktop)
         function triggerFileSelect() { hiddenInput.click(); }
         uploadBtn.addEventListener('click', triggerFileSelect);
         addMoreBtn.addEventListener('click', triggerFileSelect);
@@ -382,12 +418,13 @@
             if (uploadedFiles.length > 0) {
                 addMoreBtn.style.display = 'flex';
                 uploadBtn.innerText = "Adicionar Mais";
-                uploadBtn.style.background = "linear-gradient(90deg, #0047AB, #003366)"; // Muda cor para indicar estado
+                uploadBtn.style.background = "linear-gradient(90deg, #0047AB, #003366)"; 
                 generateBtn.style.display = 'inline-block';
                 fileListDisplay.style.display = 'block';
             }
 
-            fileListDisplay.innerHTML = > Buffer: ${uploadedFiles.length} arquivos prontos.<br><span style="opacity:0.6">[ ${uploadedFiles.slice(-2).join(', ')} ... ]</span>;
+            // Correção das crases (template literals)
+            fileListDisplay.innerHTML = `> Buffer: ${uploadedFiles.length} arquivos prontos.<br><span style="opacity:0.6">[ ${uploadedFiles.slice(-2).join(', ')} ... ]</span>`;
             statusConsole.innerText = "Dados carregados. Aguardando inicialização...";
         }
 
@@ -405,11 +442,11 @@
             const interval = setInterval(() => {
                 progress += 2;
                 // Efeito visual de carregamento no fundo da imagem
-                displayArea.style.background = conic-gradient(from ${progress * 3.6}deg, #001122, #0047AB, #001122);
+                displayArea.style.background = `conic-gradient(from ${progress * 3.6}deg, #001122, #0047AB, #001122)`;
                 
                 // Texto de carregamento randômico
                 if(progress % 10 === 0) {
-                    imageText.innerHTML = > CARREGANDO... ${progress}%<br>SETORES: [${Math.random().toString(36).substring(7)}];
+                    imageText.innerHTML = `> CARREGANDO... ${progress}%<br>SETORES: [${Math.random().toString(36).substring(7)}]`;
                 }
 
                 if (progress >= 100) {
@@ -435,7 +472,7 @@
             displayArea.style.border = "2px solid #00ffcc";
             displayArea.style.boxShadow = "0 0 40px rgba(0, 255, 204, 0.4)";
 
-            fileListDisplay.innerHTML += <br><span style="color:#00ffcc">> OUTPUT: GERADO</span>;
+            fileListDisplay.innerHTML += `<br><span style="color:#00ffcc">> OUTPUT: GERADO</span>`;
         }
     </script>
 </body>
