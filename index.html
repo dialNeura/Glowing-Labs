@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glowing Labs | Interface Moderna</title>
+    <style>
+        /* =========================================
+           ESTILO MODERNO & VARIÁVEIS
+           ========================================= */
+        :root {
+            --primary-blue: #0047AB;
+            --deep-blue: #001a4d;
+            --neon-blue: #4da6ff;
+            --glass-bg: rgba(0, 30, 80, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            /* Gradiente de fundo moderno e profundo */
+            background: linear-gradient(135deg, var(--deep-blue) 0%, var(--primary-blue) 100%);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; /* Fonte moderna para UI */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Container Principal com efeito "Glassmorphism" */
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            text-align: center;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Card translúcido ao redor do conteúdo central */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        h1 {
+            font-family: 'Courier New', Courier, monospace; /* Mantendo o toque técnico no título */
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px var(--neon-blue);
+        }
+
+        /* Área da Imagem */
+        .image-wrapper {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            margin-bottom: 40px;
+            border-radius: 20px; /* Bordas levemente arredondadas na moldura */
+            padding: 10px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(0,0,0,0.2));
+            box-shadow: 0 0 30px rgba(0, 71, 171, 0.5);
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            background: #001122;
+            border: 1px dashed var(--neon-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.5s ease;
+        }
+
+        /* A Imagem Final */
+        .image-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            animation: fadeIn 1.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; filter: blur(10px); }
+            to { opacity: 1; filter: blur(0); }
+        }
+
+        .image-text {
+            color: var(--neon-blue);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 0 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
+        /* =========================================
+           BOTÕES MODERNOS (BORDER-RADIUS 50px)
+           ========================================= */
+        
+        .action-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .btn-upload {
+            background: linear-gradient(90deg, #4da6ff, #0066cc);
+            color: white;
+            border: none;
+            padding: 18px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            
+            /* SOLICITADO: Border Radius 50px */
+            border-radius: 20px;
+            
+            box-shadow: 0 10px 25px rgba(0, 102, 204, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-transform: uppercase;
+        }
+
+        .btn-upload:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(77, 166, 255, 0.6);
+        }
+
+        .btn-upload:active {
+            transform: translateY(1px);
+        }
+
+        /* Botão "+" */
+        .add-more {
+            background: rgba(255,255,255,0.1);
+            color: var(--neon-blue);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: none; /* Escondido inicialmente */
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-left: 15px;
+            transition: all 0.3s;
+            border: 1px solid var(--neon-blue);
+        }
+        
+        .add-more:hover {
+            background: var(--neon-blue);
+            color: white;
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        .upload-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Botão Gerar */
+        .btn-generate {
+            background: transparent;
+            color: var(--neon-blue);
+            border: 2px solid var(--neon-blue);
+            padding: 15px 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: none;
+            
+            /* SOLICITADO: Border Radius 50px */
+            border-radius: 20px;
+            
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn-generate:hover {
+            background: var(--neon-blue);
+            color: #001a4d;
+            box-shadow: 0 0 30px var(--neon-blue);
+        }
+
+        /* Lista de Arquivos e Console */
+        .file-list {
+            margin-top: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            background: rgba(0,0,0,0.3);
+            padding: 10px 20px;
+            border-radius: 10px;
+            min-width: 200px;
+        }
+
+        .status-console {
+            margin-top: 25px;
+            min-height: 24px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            color: #00ffcc; /* Verde ciano moderno */
+            text-shadow: 0 0 5px rgba(0, 255, 204, 0.5);
+        }
+
+        /* Input Escondido */
+        #hiddenInput { display: none; }
+
+        /* Rodapé */
+        footer {
+            background-color: black;
+            padding: 50px 20px;
+            text-align: center;
+            border-top: 1px solid #222;
+            margin-top: auto;
+        }
+
+        .footer-brand {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--neon-blue);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .footer-info {
+            color: #666;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .hypothetical-data {
+            margin-top: 30px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.7rem;
+            color: #333;
+            border-top: 1px solid #111;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <div class="glass-card">
+            <h1>Glowing Labs</h1>
+
+            <!-- Moldura da Imagem -->
+            <div class="image-wrapper">
+                <div class="image-placeholder" id="displayArea">
+                    <span class="image-text">
+                        > AGUARDANDO INPUT...<br>
+                        [SISTEMA EM STANDBY]
+                    </span>
+                    
+                    <!-- A IMAGEM SERÁ INSERIDA VIA SCRIPT ABAIXO -->
+                    <img id="generatedImage" src="" alt="Resultado Processado" />
+                </div>
+            </div>
+
+            <div class="action-area">
+                <!-- Botões de Upload -->
+                <div class="upload-row">
+                    <button class="btn-upload" id="uploadBtn">Carregar Arquivos</button>
+                    <div class="add-more" id="addMoreBtn" title="Adicionar">+</div>
+                </div>
+
+                <!-- Lista Visual -->
+                <div class="file-list" id="fileListDisplay" style="display:none;"></div>
+
+                <!-- Botão de Ação -->
+                <button class="btn-generate" id="generateBtn">Inicializar Síntese</button>
+            </div>
+
+            <!-- Console -->
+            <div class="status-console" id="statusConsole"></div>
+        </div>
+    </div>
+
+    <!-- Input Invisível -->
+    <input type="file" id="hiddenInput" multiple>
+
+    <footer>
+        <div class="footer-brand">GLOWING LABS // SYSTEMS</div>
+        
+        <div class="footer-info">
+            <p>Algoritmos de recombinação molecular digital v4.2.</p>
+            <p>O conteúdo gerado é uma aproximação estocástica visual.</p>
+        </div>
+
+        <div class="hypothetical-data">
+            <p>Server Node: BR-SAO-99 | Latency: 4ms | Quantum Core: Active</p>
+            <p>Secure Connection (TLS 1.3) | Cycle 2049.01</p>
+        </div>
+    </footer>
+
+    <script>
+        // ========================================================
+        // 🛠️ CONFIGURAÇÃO DA IMAGEM PERSONALIZADA
+        // ========================================================
+        
+        // Coloque o nome do seu arquivo ou URL entre as aspas abaixo:
+        const nomeDoArquivoDaImagem = "ChatGPT Image - Glowing Labs.png";
+
+        // ========================================================
+
+        // Elementos do DOM
+        const uploadBtn = document.getElementById('uploadBtn');
+        const addMoreBtn = document.getElementById('addMoreBtn');
+        const hiddenInput = document.getElementById('hiddenInput');
+        const fileListDisplay = document.getElementById('fileListDisplay');
+        const generateBtn = document.getElementById('generateBtn');
+        const statusConsole = document.getElementById('statusConsole');
+        const displayArea = document.getElementById('displayArea');
+        const imageText = document.querySelector('.image-text');
+        const generatedImage = document.getElementById('generatedImage');
+
+        let uploadedFiles = [];
+
+        // Upload Trigger
+        function triggerFileSelect() { hiddenInput.click(); }
+        uploadBtn.addEventListener('click', triggerFileSelect);
+        addMoreBtn.addEventListener('click', triggerFileSelect);
+
+        // Processamento do Arquivo
+        hiddenInput.addEventListener('change', function(e) {
+            const newFiles = Array.from(e.target.files);
+            if (newFiles.length > 0) {
+                newFiles.forEach(file => uploadedFiles.push(file.name));
+                updateUI();
+            }
+        });
+
+        function updateUI() {
+            if (uploadedFiles.length > 0) {
+                addMoreBtn.style.display = 'flex';
+                uploadBtn.innerText = "Adicionar Mais";
+                uploadBtn.style.background = "linear-gradient(90deg, #0047AB, #003366)"; // Muda cor para indicar estado
+                generateBtn.style.display = 'inline-block';
+                fileListDisplay.style.display = 'block';
+            }
+
+            fileListDisplay.innerHTML = > Buffer: ${uploadedFiles.length} arquivos prontos.<br><span style="opacity:0.6">[ ${uploadedFiles.slice(-2).join(', ')} ... ]</span>;
+            statusConsole.innerText = "Dados carregados. Aguardando inicialização...";
+        }
+
+        // Simulação de Geração
+        generateBtn.addEventListener('click', function() {
+            if (uploadedFiles.length === 0) return;
+
+            statusConsole.innerText = "Processando matriz de dados...";
+            statusConsole.style.color = "#ffff00";
+            generateBtn.disabled = true;
+            generateBtn.style.opacity = "0.5";
+            generateBtn.style.cursor = "not-allowed";
+
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 2;
+                // Efeito visual de carregamento no fundo da imagem
+                displayArea.style.background = conic-gradient(from ${progress * 3.6}deg, #001122, #0047AB, #001122);
+                
+                // Texto de carregamento randômico
+                if(progress % 10 === 0) {
+                    imageText.innerHTML = > CARREGANDO... ${progress}%<br>SETORES: [${Math.random().toString(36).substring(7)}];
+                }
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    finalizeGeneration();
+                }
+            }, 30); // Velocidade do loading
+        });
+
+        function finalizeGeneration() {
+            statusConsole.innerText = "Renderização concluída com sucesso.";
+            statusConsole.style.color = "#00ffcc";
+            
+            // Remove o texto e mostra a imagem
+            imageText.style.display = 'none';
+            displayArea.style.background = "transparent"; // Remove o fundo de loading
+            
+            // Define a fonte da imagem e exibe
+            generatedImage.src = nomeDoArquivoDaImagem;
+            generatedImage.style.display = 'block';
+            
+            // Adiciona borda brilhante de sucesso
+            displayArea.style.border = "2px solid #00ffcc";
+            displayArea.style.boxShadow = "0 0 40px rgba(0, 255, 204, 0.4)";
+
+            fileListDisplay.innerHTML += <br><span style="color:#00ffcc">> OUTPUT: GERADO</span>;
+        }
+    </script>
+</body>
+</html>
